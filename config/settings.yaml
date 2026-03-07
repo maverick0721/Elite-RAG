@@ -1,0 +1,8 @@
+llm_model: mistralai/Mistral-7B-Instruct-v0.1
+embedding_model: BAAI/bge-large-en
+reranker_model: cross-encoder/ms-marco-MiniLM-L-6-v2
+
+top_k: 5
+multi_hop_k: 5
+chunk_size: 400
+chunk_overlap: 50
