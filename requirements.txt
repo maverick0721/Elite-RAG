@@ -1,0 +1,11 @@
+torch>=2.2
+transformers
+accelerate
+vllm
+sentence-transformers
+faiss-cpu
+rank-bm25
+numpy
+scikit-learn
+tqdm
+datasets
