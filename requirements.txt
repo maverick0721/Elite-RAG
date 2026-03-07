@@ -10,3 +10,6 @@ scikit-learn
 tqdm
 datasets
 langchain-community
+beautifulsoup4
+lxml
+requests
