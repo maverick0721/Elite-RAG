@@ -9,3 +9,4 @@ numpy
 scikit-learn
 tqdm
 datasets
+langchain-community

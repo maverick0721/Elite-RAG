@@ -1,8 +1,11 @@
 from orchestration.pipeline import build_pipeline
-
-rag = build_pipeline()
+import multiprocessing
 
 if __name__ == "__main__":
+
+    multiprocessing.set_start_method("spawn", force=True)
+
+    rag = build_pipeline()
 
     question = "What is retrieval augmented generation?"
 
