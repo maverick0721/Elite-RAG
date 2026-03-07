@@ -1,10 +1,14 @@
-from vllm import LLM, SamplingParams
 import os
+import multiprocessing
+
+# Fix Thunder GPU fork issue
+os.environ["VLLM_WORKER_MULTIPROC_METHOD"] = "spawn"
 
 # Force V0 and disable the experimental V1 components entirely
 os.environ["VLLM_USE_V1"] = "0"
 os.environ["VLLM_V1_INPROC"] = "0"
 
+from vllm import LLM, SamplingParams
 class LocalLLM:
 
     def __init__(self, model_name: str):
