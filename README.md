@@ -155,9 +155,6 @@ elite-rag/
 ├── orchestration/
 │   └── pipeline.py
 │
-├── docs/
-│   └── demo.gif
-│
 ├── main.py
 ├── evaluate.py
 └── requirements.txt
