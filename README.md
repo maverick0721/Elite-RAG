@@ -8,7 +8,7 @@
 
 Elite-RAG is a research-oriented implementation of a modern **Retrieval-Augmented Generation (RAG)** architecture designed to explore advanced retrieval strategies, grounded generation, and evaluation methodologies.
 
-The project implements a complete RAG pipeline including:
+The system implements a full RAG pipeline including:
 
 - Hybrid Retrieval (Dense + BM25)
 - Multi-Hop Retrieval
@@ -19,47 +19,73 @@ The project implements a complete RAG pipeline including:
 - Synthetic Dataset Generation
 - Retriever Distillation Utilities
 
-The system emphasizes **modular design**, allowing experimentation with individual components such as retrievers, rerankers, and generators.
+The goal of this repository is to provide a **clean, modular, research-friendly RAG implementation** that can be easily extended for experimentation.
+
+---
+
+# Demo
+
+Below is an example interaction with the system.
+
+```
+Ask something (type 'exit' to quit):
+
+> What is retrieval augmented generation?
+
+Answer:
+
+Retrieval-augmented generation combines information retrieval systems with language models to produce grounded responses using external knowledge.
+```
+
+You can optionally record a short demo and add it as:
+
+```
+docs/demo.gif
+```
+
+Then include:
+
+```
+![Demo](docs/demo.gif)
+```
 
 ---
 
 # Project Motivation
 
-Large language models possess strong reasoning and language capabilities but rely primarily on parametric knowledge learned during training.
+Large language models possess strong reasoning capabilities but rely primarily on parametric knowledge learned during training.
 
-This leads to several limitations:
+This leads to several challenges:
 
-- outdated information
+- outdated knowledge
 - hallucinations
-- lack of grounding in external data
+- lack of external grounding
 
-Retrieval-Augmented Generation addresses these issues by enabling models to dynamically access external knowledge during inference.
+Retrieval-Augmented Generation solves this by retrieving external documents during inference.
 
-Elite-RAG was built to explore **modern RAG system design patterns** including hybrid retrieval, multi-hop reasoning, and post-generation verification.
+Elite-RAG explores architectural ideas that improve:
 
-The goal of this project is not just to build a chatbot, but to experiment with **architectures that improve reliability and factual grounding in language models**.
+- factual grounding
+- retrieval quality
+- answer verification
 
 ---
 
 # Research Context
 
-Recent work in retrieval-augmented generation has shown that combining retrieval systems with large language models significantly improves factual accuracy.
+Recent research shows that combining retrieval systems with language models significantly improves factual reliability.
 
-Key research directions explored in this project include:
+This project explores:
 
 - hybrid dense + sparse retrieval
 - multi-hop retrieval reasoning
-- cross-encoder reranking for relevance refinement
-- answer verification using reflection prompts
+- cross-encoder reranking
+- reflection-based answer verification
 - synthetic dataset generation for evaluation
-
-Elite-RAG provides a modular platform for experimenting with these ideas.
 
 ---
 
 # System Architecture
-
-The pipeline follows this structure:
 
 ```
 User Query
@@ -86,7 +112,7 @@ Reflection / Answer Verification
 Final Answer
 ```
 
-Mermaid architecture diagram:
+Mermaid diagram:
 
 ```mermaid
 graph TD
@@ -141,12 +167,13 @@ elite-rag/
 ├── orchestration/
 │   └── pipeline.py
 │
+├── docs/
+│   └── demo.gif
+│
 ├── main.py
 ├── evaluate.py
 └── requirements.txt
 ```
-
-Each module isolates a specific part of the RAG pipeline, allowing independent experimentation and modification.
 
 ---
 
@@ -154,72 +181,46 @@ Each module isolates a specific part of the RAG pipeline, allowing independent e
 
 ## Hybrid Retrieval
 
-Elite-RAG combines two retrieval approaches:
-
-- Dense embedding retrieval
-- Sparse BM25 keyword retrieval
-
-This hybrid strategy improves recall and robustness across diverse queries.
+Combines dense embedding retrieval with BM25 lexical retrieval to improve recall.
 
 ---
 
 ## Multi-Hop Retrieval
 
-Some questions require multiple retrieval steps.
-
-The system performs:
-
-1. Initial retrieval  
-2. Context analysis  
-3. Query reformulation  
-4. Secondary retrieval  
-
-This enables the model to gather additional supporting evidence.
+The system can reformulate queries and perform additional retrieval steps when more context is needed.
 
 ---
 
 ## Cross-Encoder Reranking
 
-Retrieved candidates are reranked using a cross-encoder model.
-
-Cross-encoders evaluate query–document pairs jointly, providing stronger relevance estimation than standard embedding similarity.
+Documents are reranked using a cross-encoder model that jointly encodes the query and document.
 
 ---
 
-## Reflection-Based Answer Verification
+## Reflection-Based Verification
 
-After generation, the system performs a reflection step that verifies whether the generated answer is supported by the retrieved context.
-
-If unsupported claims are detected, the answer is revised.
-
-This mechanism helps reduce hallucinations.
+After generation, a reflection step verifies that the generated answer is supported by retrieved context.
 
 ---
 
 ## Evaluation Framework
 
-The repository includes an evaluation pipeline that measures:
+The repository includes a simple evaluation system that measures:
 
-- semantic similarity between generated and reference answers
-- aggregated performance metrics
-
-This enables systematic comparison of different retrieval or generation strategies.
+- semantic similarity
+- answer correctness
 
 ---
 
 ## Synthetic Dataset Generation
 
-The system can generate question–answer pairs directly from documents.
-
-This is useful for bootstrapping evaluation datasets when curated benchmarks are unavailable.
+The system can generate question–answer pairs from documents to bootstrap evaluation datasets.
 
 ---
 
 ## Retriever Distillation
 
-Elite-RAG includes utilities for distilling a smaller dense retriever from cross-encoder scores.
-
-This approach mirrors techniques used in production search systems.
+Includes utilities for training smaller retrievers from stronger cross-encoder models.
 
 ---
 
@@ -238,31 +239,47 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
-Ensure a compatible GPU environment if running large local models.
+Ensure a compatible GPU environment if running local models.
 
 ---
 
 # Running the System
 
-Execute the RAG pipeline:
+Start the interactive RAG interface:
 
 ```bash
 python main.py
 ```
 
-Example output:
+You will see an interactive prompt:
 
 ```
+Ask something (type 'exit' to quit):
+```
+
+Example session:
+
+```
+Ask something (type 'exit' to quit):
+
+> What is RAG?
+
 Answer:
 
-Retrieval-augmented generation combines information retrieval systems with language models to produce grounded responses using external knowledge.
+Retrieval-augmented generation combines retrieval systems with language models to generate grounded answers.
+```
+
+Exit with:
+
+```
+exit
 ```
 
 ---
 
 # Running Evaluation
 
-Run evaluation using the included benchmark dataset:
+To run evaluation on the benchmark dataset:
 
 ```bash
 python evaluate.py
@@ -282,8 +299,6 @@ Evaluation Summary:
 
 # Experiments
 
-We evaluated the system on a small benchmark dataset to compare retrieval strategies.
-
 | Model | Retrieval | Avg Similarity |
 |------|------|------|
 | Baseline RAG | Dense Retrieval | 0.71 |
@@ -291,18 +306,9 @@ We evaluated the system on a small benchmark dataset to compare retrieval strate
 
 Observations:
 
-- Hybrid retrieval improves recall.
-- Cross-encoder reranking improves answer grounding.
-- Reflection reduces unsupported claims.
-
----
-
-# Benchmark Visualization
-
-```
-Baseline RAG        ████████████ 0.71
-Elite-RAG Pipeline  ████████████████ 0.82
-```
+- Hybrid retrieval improves recall
+- Cross-encoder reranking improves grounding
+- Reflection reduces hallucinations
 
 ---
 
@@ -310,35 +316,33 @@ Elite-RAG Pipeline  ████████████████ 0.82
 
 ### Hybrid Retrieval
 
-Dense retrieval captures semantic similarity while BM25 captures lexical signals. Combining both improves robustness.
+Dense retrieval captures semantic similarity while BM25 captures lexical signals.
 
 ### Cross-Encoder Reranking
 
-Bi-encoder retrievers are efficient but less precise. Cross-encoders jointly encode query–document pairs, improving ranking accuracy.
+Cross-encoders evaluate query–document pairs jointly, improving relevance ranking.
 
 ### Reflection Step
 
-Language models may hallucinate even when relevant context exists. A reflection pass ensures generated answers remain grounded in retrieved documents.
+Post-generation verification reduces unsupported claims.
 
 ---
 
 # Limitations
 
-This implementation performs retrieval over a relatively small corpus and does not yet include large-scale distributed vector databases.
-
-Scaling the system to production workloads would require distributed vector search systems such as Milvus or Weaviate.
+The current system operates on a relatively small corpus and does not yet include distributed vector databases.
 
 ---
 
 # Future Work
 
-Potential extensions include:
+Potential improvements include:
 
-- distributed vector database integration  
-- adaptive retrieval policies  
-- reinforcement learning for retrieval optimization  
-- uncertainty-aware generation  
-- multi-agent retrieval systems  
+- distributed vector database integration
+- adaptive retrieval policies
+- reinforcement learning for retrieval optimization
+- uncertainty-aware generation
+- multi-agent retrieval systems
 
 ---
 
