@@ -1,15 +1,29 @@
 from orchestration.pipeline import build_pipeline
 import multiprocessing
+import torch.distributed as dist
 
-if __name__ == "__main__":
 
+def main():
     multiprocessing.set_start_method("spawn", force=True)
 
     rag = build_pipeline()
 
-    question = "What is retrieval augmented generation?"
+    try:
+        while True:
+            question = input("\nAsk something (type 'exit' to quit): ")
 
-    response = rag(question)
+            if question.lower() in ["exit", "quit", "q"]:
+                break
 
-    print("\nAnswer:\n")
-    print(response["generation"])
+            result = rag(question)
+
+            print("\nAnswer:\n")
+            print(result["generation"])
+
+    finally:
+        if dist.is_available() and dist.is_initialized():
+            dist.destroy_process_group()
+
+
+if __name__ == "__main__":
+    main()
