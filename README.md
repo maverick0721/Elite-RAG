@@ -286,8 +286,8 @@ Evaluation Summary:
 
 | Model | Retrieval | Avg Similarity |
 |------|------|------|
-| Baseline RAG | Dense Retrieval | 0.71 |
-| Elite-RAG | Hybrid + Reranking | 0.82 |
+| Baseline RAG | Dense Retrieval | 0.61 |
+| Elite-RAG | Hybrid + Reranking | 0.72 |
 
 Observations:
 

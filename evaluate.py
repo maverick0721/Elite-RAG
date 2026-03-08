@@ -1,19 +1,23 @@
 from orchestration.pipeline import build_pipeline
-
 from evaluation.benchmark_dataset import benchmark
 from evaluation.evaluator import RAGEvaluator
 from evaluation.report import summarize
+import torch.distributed as dist
+import multiprocessing
 
-pipeline = build_pipeline()
+def main():
+    multiprocessing.set_start_method("spawn", force=True)
+    pipeline = build_pipeline()
+    evaluator = RAGEvaluator(pipeline, benchmark)
+    results = evaluator.run()
+   
+    summary = summarize(results)
 
-evaluator = RAGEvaluator(
-    pipeline,
-    benchmark
-)
+    print("\nEvaluation Summary:\n")
+    print(summary)
 
-results = evaluator.run()
+    if dist.is_available() and dist.is_initialized():
+        dist.destroy_process_group()
 
-summary = summarize(results)
-
-print("\nEvaluation Summary:\n")
-print(summary)
+if __name__ == "__main__":
+    main()
