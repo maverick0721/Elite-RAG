@@ -37,18 +37,6 @@ Answer:
 Retrieval-augmented generation combines information retrieval systems with language models to produce grounded responses using external knowledge.
 ```
 
-You can optionally record a short demo and add it as:
-
-```
-docs/demo.gif
-```
-
-Then include:
-
-```
-![Demo](docs/demo.gif)
-```
-
 ---
 
 # Project Motivation
