@@ -1,336 +1,275 @@
-# Elite-RAG: A Modular Production-Oriented Retrieval-Augmented Generation System
+# Elite-RAG
 
-![Python](https://img.shields.io/badge/python-3.10+-blue.svg)
-![License](https://img.shields.io/badge/license-MIT-green)
-![LLM](https://img.shields.io/badge/LLM-Mistral%207B-orange)
-![Architecture](https://img.shields.io/badge/Architecture-RAG%20Pipeline-purple)
-![Status](https://img.shields.io/badge/status-research--prototype-yellow)
+![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)
+![Status](https://img.shields.io/badge/Status-Quickstart%20Ready-2ea44f)
+![Mode](https://img.shields.io/badge/Mode-Research%20%2B%20Demo-8A2BE2)
+![Docker](https://img.shields.io/badge/Docker-Supported-2496ED?logo=docker&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green)
 
-Elite-RAG is a research-oriented implementation of a modern **Retrieval-Augmented Generation (RAG)** architecture designed to explore advanced retrieval strategies, grounded generation, and evaluation methodologies.
+Production-oriented, modular RAG system that improves answer grounding with hybrid retrieval, reranking, and reflection.
+Designed for both recruiter-friendly demos (quickstart, one command) and research-grade experimentation (GPU/CUDA full mode).
 
-The system implements a full RAG pipeline including:
-
-- Hybrid Retrieval (Dense + BM25)
-- Multi-Hop Retrieval
-- Cross-Encoder Reranking
-- Context-Grounded Generation
-- Reflection-based Answer Verification
-- Evaluation Framework
-- Synthetic Dataset Generation
-- Retriever Distillation Utilities
-
-The goal of this repository is to provide a **clean, modular, research-friendly RAG implementation** that can be easily extended for experimentation.
+Measured outcomes:
+- `1 command` end-to-end demo via `bash run_project_demo.sh`
+- `4-stage` reliability path: setup, Q&A walkthrough, evaluation, smoke test
+- `CI-backed` quickstart validation on push/PR with GitHub Actions
 
 ---
 
-# Demo
+## Table of Contents
 
-Below is an example interaction with the system.
-
-```
-Ask something (type 'exit' to quit):
-
-> What is retrieval augmented generation?
-
-Answer:
-
-Retrieval-augmented generation combines information retrieval systems with language models to produce grounded responses using external knowledge.
-```
+- [Problem](#problem)
+- [Solution](#solution)
+- [Architecture](#architecture)
+- [Demo Command](#demo-command)
+- [Results](#results)
+- [Why This Matters](#why-this-matters)
+- [Appendix: Configuration](#appendix-configuration)
+- [License](#license)
 
 ---
 
-# Project Motivation
+## Problem
 
-Large language models possess strong reasoning capabilities but rely primarily on parametric knowledge learned during training.
+Large language models are strong reasoners but can still:
+- hallucinate unsupported facts
+- rely on stale parametric knowledge
+- miss domain-specific context
 
-This leads to several challenges:
-
-- outdated knowledge
-- hallucinations
-- lack of external grounding
-
-Retrieval-Augmented Generation solves this by retrieving external documents during inference.
-
-Elite-RAG explores architectural ideas that improve:
-
-- factual grounding
-- retrieval quality
-- answer verification
+Elite-RAG addresses this by retrieving external context, reranking candidates, generating grounded answers, and reflecting on support quality.
 
 ---
 
-# Research Context
+## Solution
 
-Recent research shows that combining retrieval systems with language models significantly improves factual reliability.
-
-This project explores:
-
-- hybrid dense + sparse retrieval
-- multi-hop retrieval reasoning
-- cross-encoder reranking
-- reflection-based answer verification
-- synthetic dataset generation for evaluation
+Elite-RAG provides a modular RAG pipeline with:
+- hybrid retrieval (dense + sparse) for better recall
+- multi-hop retrieval for harder queries
+- reranking to improve context quality
+- reflection to reduce unsupported claims
+- quickstart mode that runs reliably in common environments
 
 ---
 
-# System Architecture
+## Architecture
 
-```
-User Query
-    │
-    ▼
-Hybrid Retrieval (Dense + BM25)
-    │
-    ▼
-Multi-Hop Query Reformulation
-    │
-    ▼
-Candidate Document Retrieval
-    │
-    ▼
-Cross Encoder Reranker
-    │
-    ▼
-Context-Grounded Generation
-    │
-    ▼
-Reflection / Answer Verification
-    │
-    ▼
-Final Answer
-```
+![Architecture Flow](docs/diagrams/architecture-flow.svg)
 
-Mermaid diagram:
+### Runtime Modes
 
-```mermaid
-graph TD
-Q[User Query] --> R[Hybrid Retrieval]
-R --> M[Multi-Hop Retrieval]
-M --> C[Candidate Documents]
-C --> RR[Reranker]
-RR --> G[Generator]
-G --> REF[Reflection]
-REF --> A[Final Answer]
-```
+![Runtime Modes](docs/diagrams/runtime-modes.svg)
 
 ---
 
-# Repository Structure
+## Demo Command
 
-```
-elite-rag/
-│
-├── config/
-│   └── settings.yaml
-│
-├── models/
-│   ├── llm.py
-│   └── embeddings.py
-│
-├── ingestion/
-│   ├── loader.py
-│   ├── chunking.py
-│   └── vectorstore.py
-│
-├── retrieval/
-│   ├── hybrid.py
-│   ├── multihop.py
-│   ├── reranker.py
-│   └── distillation.py
-│
-├── generation/
-│   ├── generator.py
-│   └── reflection.py
-│
-├── evaluation/
-│   ├── benchmark_dataset.py
-│   ├── synthetic_generator.py
-│   ├── metrics.py
-│   ├── evaluator.py
-│   └── report.py
-│
-├── monitoring/
-│   └── logger.py
-│
-├── orchestration/
-│   └── pipeline.py
-│
-├── main.py
-├── evaluate.py
-└── requirements.txt
-```
-
----
-
-# Key Features
-
-## Hybrid Retrieval
-
-Combines dense embedding retrieval with BM25 lexical retrieval to improve recall.
-
----
-
-## Multi-Hop Retrieval
-
-The system can reformulate queries and perform additional retrieval steps when more context is needed.
-
----
-
-## Cross-Encoder Reranking
-
-Documents are reranked using a cross-encoder model that jointly encodes the query and document.
-
----
-
-## Reflection-Based Verification
-
-After generation, a reflection step verifies that the generated answer is supported by retrieved context.
-
----
-
-## Evaluation Framework
-
-The repository includes a simple evaluation system that measures:
-
-- semantic similarity
-- answer correctness
-
----
-
-## Synthetic Dataset Generation
-
-The system can generate question–answer pairs from documents to bootstrap evaluation datasets.
-
----
-
-## Retriever Distillation
-
-Includes utilities for training smaller retrievers from stronger cross-encoder models.
-
----
-
-# Installation
-
-Clone the repository:
+### One Command
 
 ```bash
-git clone https://github.com/yourusername/elite-rag
-cd elite-rag
+bash run_project_demo.sh
 ```
 
-Install dependencies:
+### Streamlit Live UI
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+streamlit run streamlit_app.py
+```
+
+Use this for live demos instead of CLI. The sidebar lets you switch between quickstart/full mode and run benchmark evaluation.
+
+This script:
+1. creates `.venv` if needed
+2. installs dependencies
+3. runs sample Q&A walkthrough
+4. runs quickstart evaluation
+
+### Manual Quickstart
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python main.py --quickstart
+```
+
+### Single Question
+
+```bash
+python main.py --quickstart --question "What is retrieval augmented generation?"
+```
+
+### Smoke Test
+
+```bash
+python scripts/smoke_test.py
+```
+
+---
+
+### Demo Workflow
+
+```bash
+bash run_project_demo.sh
+```
+
+Presenter flow:
+1. Run the command above.
+2. Explain each printed stage (setup, Q&A, evaluation).
+3. Switch to interactive mode:
+   - `python main.py --quickstart`
+4. Ask 2-3 audience questions live.
+5. End with reliability proof:
+   - `python scripts/smoke_test.py`
+
+### Docker (Portable)
+
+### Build and run demo
+
+```bash
+docker build -t elite-rag .
+docker run --rm -it elite-rag
+```
+
+### Docker Compose
+
+```bash
+docker compose up --build
+```
+
+### Supported container modes
+
+- `demo`: full quickstart walkthrough
+- `quickstart`: interactive quickstart chat
+- `smoke`: smoke test
+- `eval`: quickstart evaluation
+- `ui`: Streamlit live demo interface
+
+Examples:
+
+```bash
+docker run --rm -it elite-rag quickstart
+docker run --rm -it elite-rag smoke
+docker run --rm -it -p 8501:8501 elite-rag ui
+```
+
+### Full Research Mode (GPU/CUDA)
+
+Install full stack:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Ensure a compatible GPU environment if running local models.
-
----
-
-# Running the System
-
-Start the interactive RAG interface:
+Run:
 
 ```bash
 python main.py
-```
-
-You will see an interactive prompt:
-
-```
-Ask something (type 'exit' to quit):
-```
-
-Example session:
-
-```
-Ask something (type 'exit' to quit):
-
-> What is RAG?
-
-Answer:
-
-Retrieval-augmented generation combines retrieval systems with language models to generate grounded answers.
-```
-
-Exit with:
-
-```
-exit
-```
-
----
-
-# Running Evaluation
-
-To run evaluation on the benchmark dataset:
-
-```bash
 python evaluate.py
 ```
 
-Example output:
+Note: full mode may download large models and benefits from NVIDIA/CUDA.
 
+## Results
+
+| Variant | Retrieval Strategy | Avg Semantic Similarity |
+|---|---|---:|
+| Baseline RAG | Dense only | 0.61 |
+| Elite-RAG | Hybrid + Rerank + Reflection | 0.72 |
+
+Interpretation:
+- hybrid retrieval improves recall and candidate coverage
+- reranking improves context quality before generation
+- reflection helps reduce unsupported claims
+
+---
+
+## Why This Matters
+
+- demonstrates practical AI engineering beyond prompt-only demos
+- shows robust fallback design (CPU-safe quickstart plus full research mode)
+- proves reproducibility with one-command demo, smoke test, and CI checks
+- presents clear system thinking: retrieval, reranking, generation, and verification
+
+---
+
+## Appendix: Configuration
+
+Core settings live in `config/settings.yaml`.
+
+Key knobs:
+- `device`: `auto | cpu | cuda`
+- `llm_backend`: `auto | vllm | transformers | rule_based`
+- `embedding_backend`: `auto | sentence_transformers | tfidf`
+- `reranker_backend`: `auto | cross_encoder | lexical`
+- `source_urls`: ingestion sources
+
+Behavior:
+- `--quickstart` forces lightweight, reliable backends.
+- full mode tries best available backend, then falls back safely.
+- if web ingestion fails, inline fallback corpus is used.
+
+### Roadmap
+
+- [x] CPU-safe quickstart path
+- [x] One-command local demo script
+- [x] Docker and Compose support
+- [x] CI smoke test workflow
+- [ ] Add reproducible benchmark harness with fixed seeds
+- [ ] Add optional API server mode
+- [ ] Add retrieval diagnostics dashboard
+- [ ] Add multi-corpus ingestion templates
+
+### Troubleshooting
+
+- `ModuleNotFoundError` in quickstart:
+  - install deps: `pip install -r requirements.txt`
+- Full mode fails on machine without GPU:
+  - use quickstart mode: `python main.py --quickstart`
+- Docker command not found:
+  - install Docker Desktop / Docker Engine first
+- Slow first run in full mode:
+  - expected due to model downloads and initialization
+
+### Contributing
+
+1. Fork and create a feature branch.
+2. Run `python scripts/smoke_test.py`.
+3. Open a PR with:
+   - what changed
+   - why it changed
+   - how you validated it
+
+For larger changes, include before/after behavior notes and sample output.
+
+### Repository Layout
+
+```text
+elite-rag/
+├── config/              # settings and runtime knobs
+├── models/              # LLM + embedding abstractions
+├── ingestion/           # loaders, chunking, vector store
+├── retrieval/           # hybrid, multihop, reranking
+├── generation/          # answer generation + reflection
+├── evaluation/          # dataset, metrics, reports
+├── orchestration/       # pipeline assembly
+├── scripts/             # smoke tests and utilities
+├── main.py              # interactive entrypoint
+├── evaluate.py          # evaluation entrypoint
+└── run_project_demo.sh  # one-command demo
 ```
-Evaluation Summary:
 
-{
-  "avg_semantic_similarity": 0.82
-}
+### Example Output
+
+```text
+Question: What is retrieval augmented generation?
+Answer: Retrieval-augmented generation combines retrieval systems with language models to produce grounded answers from external context.
 ```
 
 ---
 
-# Experiments
+## License
 
-| Model | Retrieval | Avg Similarity |
-|------|------|------|
-| Baseline RAG | Dense Retrieval | 0.61 |
-| Elite-RAG | Hybrid + Reranking | 0.72 |
-
-Observations:
-
-- Hybrid retrieval improves recall
-- Cross-encoder reranking improves grounding
-- Reflection reduces hallucinations
-
----
-
-# Design Decisions
-
-### Hybrid Retrieval
-
-Dense retrieval captures semantic similarity while BM25 captures lexical signals.
-
-### Cross-Encoder Reranking
-
-Cross-encoders evaluate query–document pairs jointly, improving relevance ranking.
-
-### Reflection Step
-
-Post-generation verification reduces unsupported claims.
-
----
-
-# Limitations
-
-The current system operates on a relatively small corpus and does not yet include distributed vector databases.
-
----
-
-# Future Work
-
-Potential improvements include:
-
-- distributed vector database integration
-- adaptive retrieval policies
-- reinforcement learning for retrieval optimization
-- uncertainty-aware generation
-- multi-agent retrieval systems
-
----
-
-# License
-
-MIT License
+MIT

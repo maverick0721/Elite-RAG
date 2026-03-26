@@ -1,0 +1,10 @@
+services:
+  elite-rag:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: elite-rag:latest
+    container_name: elite-rag
+    stdin_open: true
+    tty: true
+    command: ["demo"]

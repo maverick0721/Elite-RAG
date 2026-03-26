@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520">
+  <defs>
+    <style>
+      .title { font: 700 26px 'Segoe UI', Arial, sans-serif; fill: #0f172a; }
+      .group-title { font: 700 18px 'Segoe UI', Arial, sans-serif; fill: #1f2937; }
+      .label { font: 600 14px 'Segoe UI', Arial, sans-serif; fill: #0f172a; text-anchor: middle; dominant-baseline: middle; }
+      .group-a { fill: #eff6ff; stroke: #3b82f6; stroke-width: 2; rx: 12; }
+      .group-b { fill: #ecfeff; stroke: #06b6d4; stroke-width: 2; rx: 12; }
+      .node-a { fill: #dbeafe; stroke: #2563eb; stroke-width: 2; rx: 10; }
+      .node-b { fill: #ccfbf1; stroke: #0891b2; stroke-width: 2; rx: 10; }
+      .final { fill: #dcfce7; stroke: #16a34a; stroke-width: 2; rx: 10; }
+      .arrow { stroke: #475569; stroke-width: 2.5; fill: none; marker-end: url(#arrowhead); }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#475569"/>
+    </marker>
+  </defs>
+
+  <text x="40" y="45" class="title">Elite-RAG Architecture Flow</text>
+
+  <rect x="180" y="90" width="470" height="330" class="group-a"/>
+  <text x="200" y="118" class="group-title">Retrieval Stage</text>
+
+  <rect x="230" y="150" width="370" height="58" class="node-a"/>
+  <text x="415" y="179" class="label">Hybrid Retrieval (Dense + Sparse)</text>
+
+  <rect x="230" y="235" width="370" height="58" class="node-a"/>
+  <text x="415" y="264" class="label">Multi-Hop Reformulation</text>
+
+  <rect x="230" y="320" width="370" height="58" class="node-a"/>
+  <text x="415" y="349" class="label">Candidate Context</text>
+
+  <rect x="720" y="90" width="320" height="330" class="group-b"/>
+  <text x="740" y="118" class="group-title">Grounding Stage</text>
+
+  <rect x="760" y="150" width="240" height="58" class="node-b"/>
+  <text x="880" y="179" class="label">Reranker</text>
+
+  <rect x="760" y="235" width="240" height="58" class="node-b"/>
+  <text x="880" y="264" class="label">Context-Grounded Generation</text>
+
+  <rect x="760" y="320" width="240" height="58" class="node-b"/>
+  <text x="880" y="349" class="label">Reflection / Verification</text>
+
+  <rect x="1055" y="235" width="120" height="58" class="final"/>
+  <text x="1115" y="264" class="label">Final Answer</text>
+
+  <rect x="20" y="235" width="130" height="58" class="node-a"/>
+  <text x="85" y="264" class="label">User Question</text>
+
+  <path d="M150 264 L230 264" class="arrow"/>
+  <path d="M415 208 L415 235" class="arrow"/>
+  <path d="M415 293 L415 320" class="arrow"/>
+  <path d="M600 349 L760 349" class="arrow"/>
+  <path d="M880 208 L880 235" class="arrow"/>
+  <path d="M880 293 L880 320" class="arrow"/>
+  <path d="M1000 264 L1055 264" class="arrow"/>
+</svg>

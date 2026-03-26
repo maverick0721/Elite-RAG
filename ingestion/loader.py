@@ -1,5 +1,28 @@
-from langchain_community.document_loaders import WebBaseLoader
+from dataclasses import dataclass
+
+try:
+    from langchain_core.documents import Document
+except Exception:
+    @dataclass
+    class Document:
+        page_content: str
+
 
 def load_documents(urls):
-    docs = [WebBaseLoader(url).load() for url in urls]
-    return [item for sublist in docs for item in sublist]
+    try:
+        from langchain_community.document_loaders import WebBaseLoader
+    except Exception:
+        return []
+
+    docs = []
+    for url in urls:
+        try:
+            docs.extend(WebBaseLoader(url).load())
+        except Exception:
+            # Keep pipeline resilient when a source is unavailable.
+            continue
+    return docs
+
+
+def load_inline_documents(texts):
+    return [Document(page_content=text) for text in texts]

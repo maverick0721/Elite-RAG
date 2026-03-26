@@ -3,7 +3,7 @@ import yaml
 from models.llm import LocalLLM
 from models.embeddings import LocalEmbeddings
 
-from ingestion.loader import load_documents
+from ingestion.loader import load_documents, load_inline_documents
 from ingestion.chunking import split_documents
 from ingestion.vectorstore import FAISSVectorStore
 
@@ -17,20 +17,58 @@ from generation.reflection import reflect
 from monitoring.logger import RAGLogger
 
 
-def build_pipeline():
+DEFAULT_QUICKSTART_CORPUS = [
+    (
+        "Retrieval-augmented generation (RAG) combines document retrieval and language "
+        "generation. It improves factual grounding by giving the generator relevant context."
+    ),
+    (
+        "Hybrid retrieval combines dense embedding search with sparse lexical search such as BM25. "
+        "This usually improves recall compared to either approach alone."
+    ),
+    (
+        "A reranker scores query-document pairs and improves ranking quality. Reflection can check "
+        "whether an answer is supported by context and reduce unsupported claims."
+    ),
+]
 
-    config = yaml.safe_load(
-        open("config/settings.yaml")
-    )
+
+def _build_docs(config, quickstart: bool):
+    if quickstart:
+        corpus = config.get("quickstart_corpus", DEFAULT_QUICKSTART_CORPUS)
+        return load_inline_documents(corpus)
+
+    docs = load_documents(config.get("source_urls", []))
+    if docs:
+        return docs
+    # If network/doc loading fails, still keep the app runnable.
+    return load_inline_documents(DEFAULT_QUICKSTART_CORPUS)
+
+
+def build_pipeline(config_path="config/settings.yaml", quickstart=False):
+    with open(config_path) as f:
+        config = yaml.safe_load(f)
 
     logger = RAGLogger()
+    device = config.get("device", "auto")
 
-    llm = LocalLLM(config["llm_model"])
-    embeddings = LocalEmbeddings(config["embedding_model"])
+    llm_backend = config.get("llm_backend", "auto")
+    embedding_backend = config.get("embedding_backend", "auto")
+    reranker_backend = config.get("reranker_backend", "auto")
 
-    docs = load_documents([
-        "https://en.wikipedia.org/wiki/Retrieval-augmented_generation"
-    ])
+    if quickstart:
+        llm_backend = "rule_based"
+        embedding_backend = "tfidf"
+        reranker_backend = "lexical"
+
+    llm = LocalLLM(config["llm_model"], backend=llm_backend, device=device)
+    embeddings = LocalEmbeddings(
+        config["embedding_model"],
+        backend=embedding_backend,
+        device=device,
+    )
+
+    docs = _build_docs(config, quickstart=quickstart)
 
     splits = split_documents(
         docs,
@@ -48,7 +86,11 @@ def build_pipeline():
         llm
     )
 
-    reranker = Reranker(config["reranker_model"])
+    reranker = Reranker(
+        config["reranker_model"],
+        backend=reranker_backend,
+        device=device,
+    )
 
     def pipeline(question):
 

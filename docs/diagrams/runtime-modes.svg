@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="560" viewBox="0 0 1200 560">
+  <defs>
+    <style>
+      .title { font: 700 26px 'Segoe UI', Arial, sans-serif; fill: #0f172a; }
+      .group-title { font: 700 18px 'Segoe UI', Arial, sans-serif; fill: #1f2937; }
+      .label { font: 600 14px 'Segoe UI', Arial, sans-serif; fill: #0f172a; text-anchor: middle; dominant-baseline: middle; }
+      .quick-group { fill: #f0fdf4; stroke: #22c55e; stroke-width: 2; rx: 12; }
+      .full-group { fill: #f5f3ff; stroke: #8b5cf6; stroke-width: 2; rx: 12; }
+      .node-q { fill: #dcfce7; stroke: #16a34a; stroke-width: 2; rx: 10; }
+      .node-f { fill: #ede9fe; stroke: #7c3aed; stroke-width: 2; rx: 10; }
+      .start { fill: #e2e8f0; stroke: #475569; stroke-width: 2; rx: 10; }
+      .arrow { stroke: #475569; stroke-width: 2.5; fill: none; marker-end: url(#arrowhead2); }
+    </style>
+    <marker id="arrowhead2" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#475569"/>
+    </marker>
+  </defs>
+
+  <text x="40" y="45" class="title">Runtime Modes</text>
+
+  <rect x="40" y="95" width="150" height="58" class="start"/>
+  <text x="115" y="124" class="label">Start</text>
+
+  <rect x="250" y="95" width="190" height="58" class="start"/>
+  <text x="345" y="124" class="label">Selected Mode</text>
+
+  <rect x="40" y="190" width="500" height="310" class="quick-group"/>
+  <text x="60" y="218" class="group-title">Quickstart Path</text>
+
+  <rect x="85" y="250" width="410" height="54" class="node-q"/>
+  <text x="290" y="277" class="label">Rule-based LLM</text>
+
+  <rect x="85" y="325" width="410" height="54" class="node-q"/>
+  <text x="290" y="352" class="label">TF-IDF Embeddings</text>
+
+  <rect x="85" y="400" width="410" height="54" class="node-q"/>
+  <text x="290" y="427" class="label">Lexical Reranker</text>
+
+  <rect x="85" y="470" width="410" height="54" class="node-q"/>
+  <text x="290" y="497" class="label">Runs on common CPU environments</text>
+
+  <rect x="600" y="190" width="560" height="310" class="full-group"/>
+  <text x="620" y="218" class="group-title">Full Mode Path</text>
+
+  <rect x="640" y="250" width="480" height="54" class="node-f"/>
+  <text x="880" y="277" class="label">Auto Backend Resolver</text>
+
+  <rect x="640" y="325" width="150" height="54" class="node-f"/>
+  <text x="715" y="352" class="label">vLLM / Transformers</text>
+
+  <rect x="805" y="325" width="150" height="54" class="node-f"/>
+  <text x="880" y="352" class="label">ST / TF-IDF</text>
+
+  <rect x="970" y="325" width="150" height="54" class="node-f"/>
+  <text x="1045" y="352" class="label">CrossEncoder / Lexical</text>
+
+  <rect x="640" y="420" width="480" height="54" class="node-f"/>
+  <text x="880" y="447" class="label">Best quality path (GPU/CUDA recommended)</text>
+
+  <path d="M190 124 L250 124" class="arrow"/>
+  <path d="M300 153 L300 250" class="arrow"/>
+  <path d="M390 153 L760 250" class="arrow"/>
+
+  <path d="M290 304 L290 325" class="arrow"/>
+  <path d="M290 379 L290 400" class="arrow"/>
+  <path d="M290 454 L290 470" class="arrow"/>
+
+  <path d="M880 304 L715 325" class="arrow"/>
+  <path d="M880 304 L880 325" class="arrow"/>
+  <path d="M880 304 L1045 325" class="arrow"/>
+  <path d="M715 379 L760 420" class="arrow"/>
+  <path d="M880 379 L880 420" class="arrow"/>
+  <path d="M1045 379 L1000 420" class="arrow"/>
+</svg>

@@ -1,8 +1,21 @@
 llm_model: mistralai/Mistral-7B-Instruct-v0.1
 embedding_model: BAAI/bge-large-en
 reranker_model: cross-encoder/ms-marco-MiniLM-L-6-v2
+llm_backend: auto
+embedding_backend: auto
+reranker_backend: auto
+device: auto
+
+source_urls:
+  - https://en.wikipedia.org/wiki/Retrieval-augmented_generation
 
 top_k: 5
 multi_hop_k: 5
 chunk_size: 400
 chunk_overlap: 50
+
+# Used by `--quickstart` and as fallback when web loading fails.
+quickstart_corpus:
+  - Retrieval-augmented generation combines retrieval systems with language models to produce grounded answers from external context.
+  - Hybrid retrieval combines dense semantic retrieval and sparse lexical retrieval such as BM25.
+  - Reflection verifies whether the answer is supported by the provided context and reduces hallucinations.
